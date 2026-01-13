@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TareaService {
 
-  private apiUrl = 'http://localhost:5000/api/tareas';
+  private apiUrl = 'https://tu-backend-de-render.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
