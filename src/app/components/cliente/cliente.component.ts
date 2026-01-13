@@ -8,12 +8,15 @@ import { ApiService } from '../../services/api.service';
 })
 export class ClienteComponent implements OnInit {
   clientes: any[] = [];
-  cliente = {
+  
+  // Se cambió el nombre de 'cliente' a 'nuevoCliente' para que el HTML lo reconozca
+  nuevoCliente: any = {
     nombre: '',
     email: '',
     telefono: '',
     direccion: ''
   };
+  
   editando = false;
   clienteEditId: string = '';
 
@@ -32,7 +35,6 @@ export class ClienteComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error cargando clientes:', error);
-        // ❌ ELIMINÉ LOS DATOS FALSOS
         this.clientes = [];
         alert('Error al cargar clientes. Verifica la conexión con el backend.');
       }
@@ -41,7 +43,7 @@ export class ClienteComponent implements OnInit {
 
   guardarCliente(): void {
     if (this.editando) {
-      this.apiService.put('clientes', this.clienteEditId, this.cliente).subscribe({
+      this.apiService.put('clientes', this.clienteEditId, this.nuevoCliente).subscribe({
         next: (response: any) => {
           console.log('Cliente actualizado:', response);
           this.cargarClientes();
@@ -54,7 +56,7 @@ export class ClienteComponent implements OnInit {
         }
       });
     } else {
-      this.apiService.post('clientes', this.cliente).subscribe({
+      this.apiService.post('clientes', this.nuevoCliente).subscribe({
         next: (response: any) => {
           console.log('Cliente creado:', response);
           this.cargarClientes();
@@ -69,10 +71,11 @@ export class ClienteComponent implements OnInit {
     }
   }
 
-  editarCliente(cliente: any): void {
+  editarCliente(clienteData: any): void {
     this.editando = true;
-    this.clienteEditId = cliente._id;
-    this.cliente = { ...cliente };
+    this.clienteEditId = clienteData._id;
+    // Copiamos los datos al objeto que usa el formulario (modal)
+    this.nuevoCliente = { ...clienteData };
   }
 
   eliminarCliente(id: string): void {
@@ -92,7 +95,7 @@ export class ClienteComponent implements OnInit {
   }
 
   limpiarForm(): void {
-    this.cliente = {
+    this.nuevoCliente = {
       nombre: '',
       email: '',
       telefono: '',
