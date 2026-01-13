@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TareaService {
 
-  private apiUrl = 'https://tu-backend-de-render.onrender.com/api';
+  private apiUrl = 'https://crm-backend-xyz.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
