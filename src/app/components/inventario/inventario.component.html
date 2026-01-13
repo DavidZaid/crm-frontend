@@ -1,0 +1,120 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark">Gestión de Inventario</h2>
+    <button class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#productoModal">
+      + Nuevo Producto
+    </button>
+  </div>
+
+  <div class="d-none d-md-block card shadow-sm border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Categoría</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of productos">
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.descripcion }}</td>
+              <td>${{ producto.precio | number }}</td>
+              <td>{{ producto.stock }}</td>
+              <td>{{ producto.categoria }}</td>
+              <td>
+                <div class="d-flex">
+                  <button class="btn btn-warning btn-sm me-2" (click)="editarProducto(producto)" data-bs-toggle="modal" data-bs-target="#productoModal">Editar</button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto._id)">Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-md-none">
+    <div *ngFor="let producto of productos" class="card shadow-sm mb-3 border-0 p-3" style="border-left: 5px solid #212529 !important;">
+      <div class="mb-2">
+        <label class="text-muted small fw-bold d-block text-uppercase">Producto</label>
+        <span class="fw-bold fs-5">{{ producto.nombre }}</span>
+      </div>
+      <div class="mb-2">
+        <label class="text-muted small fw-bold d-block text-uppercase">Descripción</label>
+        <span class="text-break">{{ producto.descripcion }}</span>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <label class="text-muted small fw-bold d-block text-uppercase">Precio</label>
+          <span class="text-success fw-bold">${{ producto.precio | number }}</span>
+        </div>
+        <div class="col-6">
+          <label class="text-muted small fw-bold d-block text-uppercase">Stock</label>
+          <span [class.text-danger]="producto.stock <= 5">{{ producto.stock }} unidades</span>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label class="text-muted small fw-bold d-block text-uppercase">Categoría</label>
+        <span class="badge bg-secondary text-white">{{ producto.categoria }}</span>
+      </div>
+      <div class="d-flex gap-2 mt-3 pt-2 border-top">
+        <button class="btn btn-warning btn-sm flex-fill" (click)="editarProducto(producto)" data-bs-toggle="modal" data-bs-target="#productoModal">Editar</button>
+        <button class="btn btn-danger btn-sm flex-fill" (click)="eliminarProducto(producto._id)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="productoModal" tabindex="-1" aria-labelledby="productoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productoModalLabel">
+          {{ editando ? 'Editar Producto' : 'Nuevo Producto' }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="guardarProducto()" #productoForm="ngForm">
+          <div class="mb-3">
+            <label for="nombreProducto" class="form-label">Nombre *</label>
+            <input type="text" class="form-control" id="nombreProducto" [(ngModel)]="producto.nombre" name="nombre" required>
+          </div>
+          <div class="mb-3">
+            <label for="descripcionProducto" class="form-label">Descripción</label>
+            <textarea class="form-control" id="descripcionProducto" [(ngModel)]="producto.descripcion" name="descripcion" rows="3"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-6 mb-3">
+              <label for="precioProducto" class="form-label">Precio *</label>
+              <input type="number" class="form-control" id="precioProducto" [(ngModel)]="producto.precio" name="precio" required min="0" step="0.01">
+            </div>
+            <div class="col-6 mb-3">
+              <label for="stockProducto" class="form-label">Stock *</label>
+              <input type="number" class="form-control" id="stockProducto" [(ngModel)]="producto.stock" name="stock" required min="0">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="categoriaProducto" class="form-label">Categoría</label>
+            <input type="text" class="form-control" id="categoriaProducto" [(ngModel)]="producto.categoria" name="categoria">
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+              {{ editando ? 'Actualizar' : 'Guardar' }}
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="limpiarForm()">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

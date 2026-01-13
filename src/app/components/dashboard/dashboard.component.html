@@ -1,0 +1,70 @@
+<div class="container-fluid mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Dashboard de Ventas</h2>
+  </div>
+
+  <!-- Mensajes de carga / error -->
+  <div *ngIf="cargando" class="alert alert-info">
+    Cargando información del dashboard...
+  </div>
+
+  <div *ngIf="errorMensaje && !cargando" class="alert alert-danger">
+    {{ errorMensaje }}
+  </div>
+
+  <!-- KPIs principales -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-header">Total ventas mes actual</div>
+        <div class="card-body">
+          <h3 class="card-title">
+            ${{ totalMesActual | number:'1.0-0' }}
+          </h3>
+          <p class="card-text">
+            Año {{ anioActual }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficas -->
+  <div class="row">
+    <!-- Gráfica de barras: Ventas por Mes -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          Ventas por Mes ({{ anioActual }})
+        </div>
+        <div class="card-body">
+          <canvas
+            baseChart
+            [data]="barChartData"
+            [options]="barChartOptions"
+            [type]="barChartType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfica de torta: Productos más vendidos -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          Productos más vendidos
+        </div>
+        <div class="card-body">
+          <canvas
+            baseChart
+            [data]="pieChartData"
+            [options]="pieChartOptions"
+            [type]="pieChartType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

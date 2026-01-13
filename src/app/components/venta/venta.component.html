@@ -1,0 +1,233 @@
+<div class="container-fluid ventas-container py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="display-6 fw-semibold titulo-seccion">Gestión de Ventas</h2>
+    <button class="btn btn-success btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#ventaModal">
+      <i class="bi bi-plus-circle"></i> Nueva Venta
+    </button>
+  </div>
+
+  <div class="row mb-4 g-3">
+    <div class="col-6 col-md-4">
+      <div class="card funnel-card shadow-sm border-0 bg-prospecto h-100">
+        <div class="card-body">
+          <h5 class="fw-bold">Prospectos</h5>
+          <p class="contador mb-0">{{ prospectos.length }} ventas</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4">
+      <div class="card funnel-card shadow-sm border-0 bg-negociacion h-100">
+        <div class="card-body">
+          <h5 class="fw-bold">En Negociación</h5>
+          <p class="contador mb-0">{{ negociaciones.length }} ventas</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card funnel-card shadow-sm border-0 bg-cierre h-100">
+        <div class="card-body">
+          <h5 class="fw-bold">Cierre</h5>
+          <p class="contador mb-0">{{ cierres.length }} ventas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-none d-md-block card shadow-sm mb-5 tabla-card">
+    <div class="card-body p-0">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of ventas">
+            <td class="fw-semibold">{{ v.cliente }}</td>
+            <td>${{ v.total | number }}</td>
+            <td>
+              <select class="form-select form-select-sm estado-select"
+                      [(ngModel)]="v.estado"
+                      (change)="cambiarEstado(v, v.estado)">
+                <option value="prospecto">Prospecto</option>
+                <option value="negociacion">Negociación</option>
+                <option value="cierre">Cierre</option>
+              </select>
+            </td>
+            <td>{{ v.fecha | date:'yyyy-MM-dd' }}</td>
+            <td>
+              <button class="btn btn-danger btn-sm shadow-sm eliminar-btn"
+                      (click)="eliminarVenta(v._id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-md-none mb-5">
+    <div *ngFor="let v of ventas" class="card shadow-sm mb-3 border-0 p-3" style="border-left: 5px solid #212529 !important;">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="fw-bold fs-5 text-dark">{{ v.cliente }}</span>
+        <button class="btn btn-outline-danger btn-sm border-0" (click)="eliminarVenta(v._id)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+      <div class="row small mb-2 text-muted fw-bold">
+        <div class="col-6">TOTAL</div>
+        <div class="col-6">FECHA</div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-6 fw-bold text-success fs-5">${{ v.total | number }}</div>
+        <div class="col-6">{{ v.fecha | date:'yyyy-MM-dd' }}</div>
+      </div>
+      <div>
+        <label class="small fw-bold text-muted mb-1">CAMBIAR ESTADO</label>
+        <select class="form-select form-select-sm" [(ngModel)]="v.estado" (change)="cambiarEstado(v, v.estado)">
+          <option value="prospecto">Prospecto</option>
+          <option value="negociacion">Negociación</option>
+          <option value="cierre">Cierre</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="kanban-outer-wrapper" style="overflow-x: auto; padding-bottom: 20px;">
+    <div class="kanban-container d-flex flex-nowrap gap-3" style="min-width: 900px;">
+
+      <div class="kanban-column k-prospecto shadow-sm flex-fill"
+           (dragover)="allowDrop($event)"
+           (drop)="drop('prospecto')">
+        <h4 class="kanban-title">Prospectos</h4>
+        <div class="kanban-card shadow-sm"
+             *ngFor="let v of prospectos"
+             draggable="true"
+             (dragstart)="dragStart(v)"
+             (dragend)="dragEnd()">
+          <h5 class="fw-bold">{{ v.cliente }}</h5>
+          <p class="mb-0">Total: ${{ v.total | number }}</p>
+        </div>
+      </div>
+
+      <div class="kanban-column k-negociacion shadow-sm flex-fill"
+           (dragover)="allowDrop($event)"
+           (drop)="drop('negociacion')">
+        <h4 class="kanban-title">Negociación</h4>
+        <div class="kanban-card shadow-sm"
+             *ngFor="let v of negociaciones"
+             draggable="true"
+             (dragstart)="dragStart(v)"
+             (dragend)="dragEnd()">
+          <h5 class="fw-bold">{{ v.cliente }}</h5>
+          <p class="mb-0">Total: ${{ v.total | number }}</p>
+        </div>
+      </div>
+
+      <div class="kanban-column k-cierre shadow-sm flex-fill"
+           (dragover)="allowDrop($event)"
+           (drop)="drop('cierre')">
+        <h4 class="kanban-title">Cierre</h4>
+        <div class="kanban-card shadow-sm"
+             *ngFor="let v of cierres"
+             draggable="true"
+             (dragstart)="dragStart(v)"
+             (dragend)="dragEnd()">
+          <h5 class="fw-bold">{{ v.cliente }}</h5>
+          <p class="mb-0">Total: ${{ v.total | number }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="ventaModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold">Nueva Venta</h5>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-4">
+          <label class="fw-bold text-muted small mb-1">CLIENTE</label>
+          <input class="form-control form-control-lg shadow-sm border-2" [(ngModel)]="venta.cliente" placeholder="Nombre del cliente">
+        </div>
+        <hr>
+        <h5 class="fw-bold mb-3">Agregar productos</h5>
+        <div class="row g-2">
+          <div class="col-12 col-md-8 mb-3">
+            <label class="fw-bold small">Producto</label>
+            <select class="form-select shadow-sm" [(ngModel)]="nuevoItem.productoId">
+              <option value="">Seleccione…</option>
+              <option *ngFor="let p of productosInventario" [value]="p._id">
+                {{ p.nombre }} — Stock: {{ p.stock }}
+              </option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4 mb-3">
+            <label class="fw-bold small">Cantidad</label>
+            <input type="number" class="form-control shadow-sm" [(ngModel)]="nuevoItem.cantidad">
+          </div>
+        </div>
+        <button class="btn btn-success w-100 shadow-sm mb-4 py-2 fw-bold" (click)="agregarItem()">
+          <i class="bi bi-cart-plus"></i> AGREGAR A LA LISTA
+        </button>
+
+        <div class="table-responsive rounded shadow-sm border mb-4" *ngIf="venta.items.length > 0">
+          <table class="table table-sm table-striped align-middle mb-0">
+            <thead class="table-primary small">
+              <tr>
+                <th>Producto</th>
+                <th>Cant</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of venta.items; let idx = index">
+                <td class="small fw-bold">{{ i.nombre }}</td>
+                <td>{{ i.cantidad }}</td>
+                <td>${{ i.precio }}</td>
+                <td class="fw-bold text-primary">${{ i.subtotal }}</td>
+                <td class="text-end">
+                  <button class="btn btn-link text-danger p-0" (click)="eliminarItem(idx)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded mb-3">
+          <h4 class="fw-bold mb-0">TOTAL:</h4>
+          <h3 class="fw-bold mb-0 text-primary">${{ venta.total }}</h3>
+        </div>
+
+        <div class="mb-2">
+          <label class="fw-bold small text-muted">ESTADO INICIAL</label>
+          <select class="form-select shadow-sm border-2" [(ngModel)]="venta.estado">
+            <option value="prospecto">Prospecto</option>
+            <option value="negociacion">Negociación</option>
+            <option value="cierre">Cierre</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer border-0 bg-light">
+        <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn btn-primary px-4 shadow-sm fw-bold" (click)="guardarVenta()" data-bs-dismiss="modal">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

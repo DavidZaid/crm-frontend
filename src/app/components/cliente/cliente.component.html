@@ -1,0 +1,63 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark">Clientes</h2>
+    <button class="btn btn-success shadow-sm" (click)="limpiarForm()" data-bs-toggle="modal" data-bs-target="#clienteModal">
+      + Nuevo
+    </button>
+  </div>
+
+  <div class="d-none d-md-block card shadow-sm border-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of clientes">
+            <td>{{ cliente.nombre }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.telefono }}</td>
+            <td>{{ cliente.direccion }}</td>
+            <td>
+              <button class="btn btn-warning btn-sm me-2" (click)="editarCliente(cliente)" data-bs-toggle="modal" data-bs-target="#clienteModal">Editar</button>
+              <button class="btn btn-danger btn-sm" (click)="eliminarCliente(cliente._id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-md-none">
+    <div *ngFor="let cliente of clientes" class="card shadow-sm mb-3 border-0 p-3" style="border-left: 5px solid #0d6efd !important;">
+      <div class="mb-2">
+        <label class="text-muted small fw-bold d-block text-uppercase">Nombre</label>
+        <span class="fw-bold fs-5">{{ cliente.nombre }}</span>
+      </div>
+      <div class="mb-2">
+        <label class="text-muted small fw-bold d-block text-uppercase">Email</label>
+        <span class="text-break">{{ cliente.email }}</span>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <label class="text-muted small fw-bold d-block text-uppercase">Teléfono</label>
+          <span>{{ cliente.telefono }}</span>
+        </div>
+        <div class="col-6">
+          <label class="text-muted small fw-bold d-block text-uppercase">Dirección</label>
+          <span class="text-break">{{ cliente.direccion }}</span>
+        </div>
+      </div>
+      <div class="d-flex gap-2 mt-3 pt-2 border-top">
+        <button class="btn btn-warning btn-sm flex-fill" (click)="editarCliente(cliente)" data-bs-toggle="modal" data-bs-target="#clienteModal">Editar</button>
+        <button class="btn btn-danger btn-sm flex-fill" (click)="eliminarCliente(cliente._id)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

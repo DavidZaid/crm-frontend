@@ -1,0 +1,40 @@
+<div class="row justify-content-center mt-5 px-3">
+  
+  <div class="col-12 col-md-5 col-lg-4">
+    
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-primary text-white text-center py-3">
+        <h4 class="mb-0 fw-bold">Iniciar Sesión</h4>
+      </div>
+
+      <div class="card-body p-4">
+        <form (ngSubmit)="login()">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control form-control-lg fs-6" 
+                   [(ngModel)]="credentials.email" name="email" 
+                   placeholder="ejemplo@correo.com" required>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Contraseña</label>
+            <input type="password" class="form-control form-control-lg fs-6" 
+                   [(ngModel)]="credentials.password" name="password" 
+                   placeholder="********" required>
+          </div>
+
+          <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm">
+            Ingresar
+          </button>
+        </form>
+
+        <div class="text-center mt-4">
+          <a routerLink="/register" class="text-decoration-none small">
+            ¿No tienes cuenta? <span class="fw-bold">Regístrate aquí</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

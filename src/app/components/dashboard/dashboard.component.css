@@ -1,0 +1,27 @@
+/* Sombra suave para las tarjetas */
+.card {
+    box-shadow: 0 4px 6px rgba(0,0,0,.05);
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #fff;
+    font-weight: bold;
+    border-bottom: 1px solid #f0f0f0;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+/* Ajuste para que las gráficas respiren en móviles */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    .card-body {
+        padding: 10px;
+        min-height: 250px; /* Evita que la gráfica colapse */
+    }
+}

@@ -1,0 +1,43 @@
+/* Fondo general para que no se vea blanco */
+.kanban-page-wrapper {
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Tu código tal cual estaba */
+.kanban-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.kanban-column {
+  flex: 1;
+  background: #f4f4f4;
+  padding: 15px;
+  border-radius: 10px;
+  min-height: 500px;
+}
+
+.kanban-column h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.kanban-card {
+  background: white;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+  cursor: grab;
+}
+
+.kanban-card.completada {
+  background: #d1ffd1;
+}
+
+.pendientes { border-left: 6px solid #ff0000; }
+.enproceso { border-left: 6px solid orange; }
+.completadas { border-left: 6px solid green; }

@@ -1,0 +1,13 @@
+.text-break {
+  word-break: break-word !important;
+  display: block;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+label {
+  letter-spacing: 0.5px;
+  color: #6c757d;
+}

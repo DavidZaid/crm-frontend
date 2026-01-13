@@ -1,0 +1,131 @@
+<div class="kanban-page-wrapper container-fluid py-3">
+  
+  <div class="toolbar mb-3">
+    <button class="btn btn-success" (click)="nuevaTarea()">+ Nueva Tarea</button>
+    <span *ngIf="mensajeInfo" class="info-msg ms-2">{{ mensajeInfo }}</span>
+  </div>
+
+  <div class="kanban-outer-scroll" style="overflow-x: auto; padding-bottom: 15px;">
+    
+    <div class="kanban-container d-flex flex-nowrap gap-3" style="min-width: 900px;">
+
+      <div class="kanban-column pendientes flex-fill"
+           (dragover)="allowDrop($event)"
+           (drop)="drop($event, 'pendiente')">
+        <h3>Pendientes</h3>
+
+        <div *ngIf="(pendientes?.length || 0) === 0" class="empty">No hay tareas pendientes.</div>
+
+        <div class="kanban-card"
+             *ngFor="let t of pendientes || []"
+             draggable="true"
+             (dragstart)="dragStart($event, t)"
+             (dragend)="dragEnd($event)">
+          <h4>{{ t.titulo }}</h4>
+          <p>{{ t.descripcion }}</p>
+          <small>Cliente: {{ t.cliente?.nombre || t.cliente }}</small><br>
+          <small *ngIf="t.fechaVencimiento">Vence: {{ t.fechaVencimiento | date:'yyyy-MM-dd' }}</small>
+
+          <div class="actions mt-2">
+            <button class="btn btn-sm btn-primary me-1" (click)="editarTarea(t)">Editar</button>
+            <button class="btn btn-sm btn-danger" (click)="eliminarTarea(t._id)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kanban-column enproceso flex-fill"
+           (dragover)="allowDrop($event)"
+           (drop)="drop($event, 'en_proceso')">
+        <h3>En Proceso</h3>
+
+        <div *ngIf="(enProceso?.length || 0) === 0" class="empty">No hay tareas en proceso.</div>
+
+        <div class="kanban-card"
+             *ngFor="let t of enProceso || []"
+             draggable="true"
+             (dragstart)="dragStart($event, t)"
+             (dragend)="dragEnd($event)">
+          <h4>{{ t.titulo }}</h4>
+          <p>{{ t.descripcion }}</p>
+          <small>Cliente: {{ t.cliente?.nombre || t.cliente }}</small><br>
+          <small *ngIf="t.fechaVencimiento">Vence: {{ t.fechaVencimiento | date:'yyyy-MM-dd' }}</small>
+
+          <div class="actions mt-2">
+            <button class="btn btn-sm btn-success me-1" (click)="marcarComoCompleta(t)">Completar</button>
+            <button class="btn btn-sm btn-danger" (click)="eliminarTarea(t._id)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kanban-column completadas flex-fill"
+           (dragover)="allowDrop($event)"
+           (drop)="drop($event, 'completada')">
+        <h3>Completadas</h3>
+
+        <div *ngIf="(completadas?.length || 0) === 0" class="empty">No hay tareas completadas.</div>
+
+        <div class="kanban-card completada"
+             *ngFor="let t of completadas || []">
+          <h4>{{ t.titulo }}</h4>
+          <p>{{ t.descripcion }}</p>
+          <small>Cliente: {{ t.cliente?.nombre || t.cliente }}</small><br>
+          <small>Finalizada</small>
+
+          <div class="actions mt-2">
+            <button class="btn btn-sm btn-danger" (click)="eliminarTarea(t._id)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalTareas" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form (ngSubmit)="guardarTarea()" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">{{ editando ? 'Editar Tarea' : 'Nueva Tarea' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-2">
+          <label class="form-label fw-bold">Título</label>
+          <input type="text" class="form-control" [(ngModel)]="tarea.titulo" name="titulo" required />
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label fw-bold">Descripción</label>
+          <textarea class="form-control" [(ngModel)]="tarea.descripcion" name="descripcion"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label fw-bold">Cliente</label>
+          <select class="form-select" [(ngModel)]="tarea.cliente" name="cliente">
+            <option value="">-- Sin cliente --</option>
+            <option *ngFor="let c of clientes" [ngValue]="c._id || c.id">{{ c.nombre || c.razonSocial }}</option>
+          </select>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label fw-bold">Fecha de vencimiento</label>
+          <input type="date" class="form-control" [(ngModel)]="tarea.fechaVencimiento" name="fechaVencimiento" />
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label fw-bold">Estado</label>
+          <select class="form-select" [(ngModel)]="tarea.estado" name="estado">
+            <option value="pendiente">Pendiente</option>
+            <option value="en_proceso">En Proceso</option>
+            <option value="completada">Completada</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">{{ editando ? 'Guardar cambios' : 'Crear tarea' }}</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+/* Estilos globales y reseteo */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7f6; /* Un gris más moderno */
+}
+
+/* Tarjetas Pro */
+.card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+/* Ajuste de Botones */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+/* MAGIA PARA TABLAS RESPONSIVAS */
+@media (max-width: 768px) {
+  /* Ocultar el encabezado de la tabla en móvil */
+  table thead {
+    display: none;
+  }
+
+  table, table tbody, table tr, table td {
+    display: block;
+    width: 100%;
+  }
+
+  table tr {
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: #fff;
+    padding: 10px;
+  }
+
+  table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+  }
+
+  /* Este truco pone el nombre de la columna a la izquierda */
+  table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    font-weight: bold;
+    text-align: left;
+  }
+}
+
+/* Estados de Tareas */
+.bg-pendiente { background-color: #ff4d4d; color: #fff; }
+.bg-en-proceso { background-color: #ffa500; color: #fff; }
+.bg-completada { background-color: #28a745; color: #fff; }
